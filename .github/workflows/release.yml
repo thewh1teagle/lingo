@@ -50,7 +50,8 @@ jobs:
       - name: Configure Rust flags for Windows
         if: matrix.platform == 'windows-latest'
         run: |
-          echo "RUSTFLAGS=\"-C target-feature=+crt-static\"" >> $GITHUB_ENV
+          Add-Content -Path $env:GITHUB_ENV -Value "RUSTFLAGS=`"-C target-feature=+crt-static`""
+        shell: pwsh
 
       - uses: tauri-apps/tauri-action@v0
         env:

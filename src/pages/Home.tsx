@@ -10,7 +10,7 @@ export default function Home() {
   const [srcText, setSrcText] = useState("");
   const [dstText, setDstText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [language, setLanguage] = useLocalStorage("prefs_language", "eng");
+  const [language, setLanguage] = useLocalStorage("prefs_language", languages["english"]);
   const navigate = useNavigate();
   const [modelPath, setModelPath] = useState<null | string>(null);
 

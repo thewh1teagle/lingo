@@ -28,3 +28,6 @@ ct2rs = { version = "0.8.5", features = ["accelerate"] }
 
 [target.'cfg(target_os = "windows")'.dependencies]
 ct2rs = "0.8.5"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+ct2rs = "0.8.5"

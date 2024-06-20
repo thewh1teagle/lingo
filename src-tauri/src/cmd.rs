@@ -1,15 +1,15 @@
 use eyre::Result;
 
 #[tauri::command]
-pub fn translate(language: String) -> Result<String> {
-    log::debug!("translate with {}", language);
+pub fn translate(language: String, model_path: String) -> Result<String> {
+    log::debug!("translate with {} {}", language, model_path);
     Ok(String::new())
 }
 
 #[tauri::command]
-pub async fn download_model() -> Result<()> {
+pub async fn download_model() -> Result<String> {
     log::debug!("download model");
-    Ok(())
+    Ok(String::new())
 }
 
 #[tauri::command]

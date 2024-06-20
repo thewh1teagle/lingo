@@ -27,7 +27,7 @@ zip = "2.1.3"
 ct2rs = { version = "0.8.5", features = ["accelerate"] }
 
 [target.'cfg(target_os = "windows")'.dependencies]
-ct2rs = "0.8.5"
+ct2rs = { version = "0.8.5", features = ["ruy"] }
 
 [target.'cfg(target_os = "linux")'.dependencies]
 ct2rs = "0.8.5"

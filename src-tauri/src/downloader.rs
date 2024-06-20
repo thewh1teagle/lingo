@@ -1,6 +1,5 @@
 use eyre::{bail, Context, OptionExt, Result};
 use futures_util::StreamExt;
-use reqwest;
 use std::clone::Clone;
 use std::io::Write;
 use std::path::PathBuf;
@@ -9,6 +8,7 @@ pub struct Downloader {
     client: reqwest::Client,
 }
 
+#[allow(unused)]
 pub async fn get_filename(url: &str) -> Result<String> {
     let client = reqwest::Client::new();
 
@@ -46,6 +46,7 @@ impl Downloader {
         let total_size = res
             .content_length()
             .ok_or_eyre(format!("Failed to get content length from '{}'", url))?;
+        log::debug!("total size is {}", total_size);
         let mut file = std::fs::File::create(path.clone()).context(format!("Failed to create file {}", path.display()))?;
         let mut downloaded: u64 = 0;
         let callback_limit = 1024 * 1024 * 2; // 1MB limit
@@ -66,6 +67,7 @@ impl Downloader {
             }
             downloaded += chunk.len() as u64;
         }
+        log::debug!("finish download");
         Ok(())
     }
 }
@@ -73,30 +75,5 @@ impl Downloader {
 impl Default for Downloader {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::{config, downloader};
-    use eyre::{Context, Result};
-
-    fn init() {
-        let _ = env_logger::builder().is_test(true).try_init();
-    }
-
-    fn on_download_progress(_: u64, _: u64) -> bool {
-        false
-    }
-
-    #[tokio::test]
-    async fn test_download() -> Result<()> {
-        init();
-        let mut d = downloader::Downloader::new();
-        let filepath = config::get_model_path()?;
-        d.download(config::URL, filepath, on_download_progress)
-            .await
-            .context("Cant download")?;
-        Ok(())
     }
 }

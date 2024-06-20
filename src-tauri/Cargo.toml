@@ -1,0 +1,29 @@
+[package]
+name = "lingo"
+version = "0.0.1"
+description = "Translate offline with meta ai models"
+authors = ["thewh1teagle"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2.0.0-beta", features = [] }
+
+[dependencies]
+tauri = { version = "2.0.0-beta", features = [] }
+tauri-plugin-shell = "2.0.0-beta"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+eyre = { git = "https://github.com/thewh1teagle/eyre", branch = "feat/report-serialize-backtrace", features = [
+    "serialize",
+] }
+tokio = { version = "1.38.0", features = ["rt-multi-thread", "macros"] }
+reqwest = { version = "0.12.5", features = ["json"] }
+futures-util = "0.3.30"
+log = "0.4.21"
+env_logger = { version = "0.11.3", features = ["color"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+ct2rs = { version = "0.8.5", features = ["accelerate"] }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+ct2rs = "0.8.5"

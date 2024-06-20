@@ -1,0 +1,3 @@
+# Lingo
+
+Translate offline

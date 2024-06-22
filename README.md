@@ -1,6 +1,6 @@
 # Lingo
 
-Desktop app for translate offline using meta ai model
+Desktop app for translate offline in any language
 
 <img width=600 src="https://github.com/thewh1teagle/lingo/assets/61390950/88617098-ea5f-4ce5-87a2-bd0c5136e32c">
 

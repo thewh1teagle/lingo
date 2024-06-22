@@ -27,9 +27,9 @@ export default function Home() {
 		setDstText(
 			resp
 				.map(([line, _score]) => {
-					line = line.replace('<unk>', '')
-					line = line.replace('<s>', '')
-					line = line.replace('</s>', '')
+					line = line.replace(/<unk>/g, '')
+					line = line.replace(/<s>/g, '')
+					line = line.replace(/<\/s>/g, '')
 					return line
 				})
 				.join('\n')

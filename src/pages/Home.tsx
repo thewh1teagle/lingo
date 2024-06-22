@@ -14,6 +14,9 @@ export default function Home() {
 	const navigate = useNavigate()
 
 	async function translate() {
+		if (isLoading) {
+			return
+		}
 		setIsLoading(true)
 		const resp = await invoke<TranslateResponse>('translate', {
 			language,

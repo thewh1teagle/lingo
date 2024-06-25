@@ -46,6 +46,7 @@ jobs:
 
       - name: install frontend dependencies
         run: bun install # change this to npm, pnpm or bun depending on which one you use.
+        working-directory: ./desktop
 
       - name: Configure Rust flags for Windows
         if: matrix.platform == 'windows-latest'

@@ -27,3 +27,5 @@ dist-ssr
 schemas/
 nllb-200-distilled-600M/
 .DS_Store
+openblas/
+target/

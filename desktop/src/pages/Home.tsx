@@ -1,8 +1,10 @@
-import languages from '../assets/languages.json'
 import { useEffect, useState } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 import { useNavigate } from 'react-router-dom'
-import { useLocalStorage } from 'usehooks-ts'
+import { useTranslation } from 'react-i18next'
+import LanguageInput from '../components/LanguageInput'
+import { usePreferenceProvider } from '../providers/PreferenceProvider'
+import AlignedTextArea from '../components/AlignedTextArea'
 
 type TranslateResponse = [string, number][] // line, score
 
@@ -10,8 +12,11 @@ export default function Home() {
 	const [srcText, setSrcText] = useState('')
 	const [dstText, setDstText] = useState('')
 	const [isLoading, setIsLoading] = useState(false)
-	const [language, setLanguage] = useLocalStorage('prefs_language', languages['english'])
+	const {dstLanguage, srcDir, setSrcDir, dstDir, setDstDir} = usePreferenceProvider()
 	const navigate = useNavigate()
+	const {t, i18n} = useTranslation()
+	
+	document.body.dir = i18n.dir()
 
 	async function translate() {
 		if (isLoading) {
@@ -19,7 +24,7 @@ export default function Home() {
 		}
 		setIsLoading(true)
 		const resp = await invoke<TranslateResponse>('translate', {
-			language,
+			language: dstLanguage,
 			text: srcText,
 		})
 		console.log('resp => ', resp)
@@ -67,40 +72,24 @@ export default function Home() {
 						</summary>
 						<ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
 							<li onClick={() => navigate('/settings')}>
-								<a>Settings</a>
+								<a>{t('common.settings')}</a>
 							</li>
 						</ul>
 					</details>
 				</div>
 			</div>
 			<div className="flex flex-col gap-1 m-auto w-56">
-				<select onChange={(e) => setLanguage(e.target.value)} value={language} className="select select-primary capitalize" name="" id="">
-					{Object.entries(languages).map(([name, code]) => (
-						<option value={code}>{name}</option>
-					))}
-				</select>
+				<LanguageInput />
 				<div>
 					<button onClick={translate} className="btn btn-primary w-full">
 						{isLoading && <span className="loading loading-spinner loading-xs"></span>}
-						Translate
+						{t('common.translate')}
 					</button>
 				</div>
 			</div>
 			<div className="flex gap-3 p-5">
-				<textarea
-					placeholder="Paste your text here..."
-					onChange={(e) => setSrcText(e.target.value)}
-					value={srcText}
-					className="textarea textarea-bordered  flex-1"
-					name=""
-					id=""></textarea>
-
-				<textarea
-					value={dstText}
-					placeholder="Translation will be here..."
-					className="textarea textarea-bordered min-h-[20vh] flex-1"
-					name=""
-					id=""></textarea>
+				<AlignedTextArea dir={srcDir} onChange={(newValue) => setSrcText(newValue)} value={srcText} placeholder={t('common.paste-your-text-here')} onDirToggle={() => setSrcDir(srcDir === 'ltr' ? 'rtl' : 'ltr')} />
+				<AlignedTextArea dir={dstDir} onChange={(newValue) => setDstText(newValue)} value={dstText} placeholder={t('common.translation-will-be-here')} onDirToggle={() => setDstDir(dstDir === 'ltr' ? 'rtl' : 'ltr')} />
 			</div>
 		</div>
 	)

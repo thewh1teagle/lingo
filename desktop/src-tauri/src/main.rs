@@ -14,6 +14,7 @@ fn main() {
     env_logger::init();
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_fs::init())
         .manage(Mutex::new(None) as TranslatorHandle)
         .invoke_handler(tauri::generate_handler![
             cmd::translate,

@@ -1,0 +1,7 @@
+{
+	"bundle": {
+		"resources": {
+			"openblas\\bin\\*.dll": "./"
+		}
+	}
+}

@@ -1,6 +1,6 @@
 {
   "productName": "lingo",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "identifier": "github.com.thewh1teagle.lingo",
   "build": {
     "beforeDevCommand": "bun run dev",
@@ -36,6 +36,9 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "resources": {
+			"locales": "locales"
+		}
   }
 }

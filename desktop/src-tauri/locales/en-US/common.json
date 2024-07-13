@@ -1,7 +1,7 @@
 {
     "settings": "Settings",
     "translate": "Translate",
-    "downloading-meta.model": "Downloading Meta Model...",
+    "downloading-meta-model": "Downloading Meta Model...",
     "this-happens-only-once": "This happens only once! 🎉",
     "open-models-folder": "Open models folder",
     "back-to-home": "Back",

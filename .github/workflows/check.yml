@@ -1,0 +1,85 @@
+name: Test all targets
+
+on: [push, pull_request]
+
+permissions:
+  contents: write
+
+jobs:
+  build-tauri:
+          permissions:
+            contents: write
+          strategy:
+            fail-fast: false
+            matrix:
+              include:
+                - platform: 'macos-latest'
+                  args: '--target aarch64-apple-darwin'
+                  label: 'Mac-ARM64'
+                - platform: 'macos-latest'
+                  args: '--target x86_64-apple-darwin'
+                  label: 'Mac-x86'
+                - platform: 'ubuntu-22.04'
+                  args: ''
+                  label: 'Linux'
+                - platform: 'windows-latest'
+                  args: ''
+                  label: 'Windows'
+
+          runs-on: ${{ matrix.platform }}
+          steps:
+            - uses: actions/checkout@v4
+
+            - name: install dependencies (ubuntu only)
+              if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+              # webkitgtk 4.0 is for Tauri v1 - webkitgtk 4.1 is for Tauri v2.
+
+            - name: Setup Bun
+              uses: oven-sh/setup-bun@v1
+              with:
+                bun-version: latest
+
+            - name: install Rust stable
+              uses: dtolnay/rust-toolchain@stable
+              with:
+                # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
+                targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+            - name: Rust cache
+              uses: swatinem/rust-cache@v2
+              with:
+                workspaces: './src-tauri -> target'
+
+            - name: install frontend dependencies
+              run: bun install # change this to npm, pnpm or bun depending on which one you use.
+              working-directory: ./desktop
+
+            - name: Configure Rust flags for Windows
+              if: matrix.platform == 'windows-latest'
+              run: |
+                Add-Content -Path $env:GITHUB_ENV -Value "RUSTFLAGS=-C target-feature=+crt-static"
+              shell: pwsh
+
+            # Run pre build
+            - name: Run pre_build.js on ${{ matrix.platform }}
+              run: bun scripts/pre_build.js
+
+            - name: Build the app
+              id: tauri-build
+              uses: tauri-apps/tauri-action@v0.5.13
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                projectPath: './desktop'
+                args: ${{ matrix.args }}
+                tauriScript: bunx tauri
+
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v4.4.0
+              with:
+                name: 'dekstop-app-${{steps.tauri-build.outputs.appVersion}}_${{ matrix.label }}'
+                path: "${{ join(fromJSON(steps.tauri-build.outputs.artifactPaths), '\n') }}"
+                retention-days: 5

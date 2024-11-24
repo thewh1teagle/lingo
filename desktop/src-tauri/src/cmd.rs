@@ -2,7 +2,7 @@ use crate::{downloader::Downloader, unzip, TranslatorHandle};
 use ct2rs::Translator;
 use eyre::{eyre, ContextCompat, Result};
 use std::{fs, path::PathBuf, time};
-use tauri::{AppHandle, Manager, State};
+use tauri::{AppHandle, Emitter, Manager, State};
 use tauri_plugin_shell::ShellExt;
 
 #[tauri::command]

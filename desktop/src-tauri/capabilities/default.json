@@ -39,18 +39,19 @@
         }
       ]
     },
-    "path:default",
+    "fs:scope",
+    "core:path:default",
     "fs:allow-remove",
     "fs:allow-read-dir",
     "fs:allow-read-text-file",
     "fs:allow-app-write",
-    "event:default",
-    "window:default",
-    "app:default",
-    "image:default",
-    "resources:default",
-    "menu:default",
-    "tray:default",
+    "core:event:default",
+    "core:window:default",
+    "core:app:default",
+    "core:image:default",
+    "core:resources:default",
+    "core:menu:default",
+    "core:tray:default",
     "shell:allow-open"
   ]
 }

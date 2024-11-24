@@ -5,14 +5,18 @@ description = "Translate offline with meta ai models"
 authors = ["thewh1teagle"]
 edition = "2021"
 
+[lib]
+name = "app_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
 [build-dependencies]
 fs_extra = "1.3.0"
-tauri-build = { version = "2.0.0-beta", features = [] }
+tauri-build = { version = "2.0.3", features = [] }
 
 [dependencies]
-tauri = { version = "2.0.0-beta", features = ["devtools"] }
-tauri-plugin-shell = "2.0.0-beta"
-tauri-plugin-fs = "2.0.0-beta.7"
+tauri = { version = "2.1.1", features = ["devtools"] }
+tauri-plugin-shell = "2.0.2"
+tauri-plugin-fs = "2.0.3"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 eyre = { git = "https://github.com/thewh1teagle/eyre", branch = "feat/report-serialize-backtrace", features = [
